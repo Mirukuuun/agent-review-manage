@@ -1,0 +1,34 @@
+{
+  "name": "ai-review-manage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI Agent Review Gateway",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run --workspaces build",
+    "typecheck": "npm run --workspaces typecheck",
+    "test": "npm run --workspaces test",
+    "lint": "npm run --workspaces lint",
+    "dev": "npm run mcp:http",
+    "mcp:http": "npm run --workspace @agent-review/server mcp:http",
+    "mcp:stdio": "npm run --workspace @agent-review/server mcp:stdio",
+    "example:agent:http": "tsx scripts/example-agent.ts --transport=http",
+    "example:agent:stdio": "tsx scripts/example-agent.ts --transport=stdio",
+    "example:webhook-receiver": "tsx scripts/webhook-receiver.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "supertest": "^7.1.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
+  }
+}
+

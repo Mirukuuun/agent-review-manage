@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Review Manage MCP"
+  short_description: "Use this repo and connect to its MCP safely"
+  default_prompt: "Use $ai-review-manage-mcp to run this project and integrate an MCP client end to end."
