@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Agent 审核网关</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-background" aria-hidden="true">
+      <div class="bg-orb orb-a"></div>
+      <div class="bg-orb orb-b"></div>
+    </div>
+
+    <div class="app-shell">
+      <aside class="sidebar surface" id="sidebar">
+        <div class="brand-block">
+          <p class="kicker">人工审核流程</p>
+          <div class="brand">AI 审核网关</div>
+          <p class="brand-subtitle">任务审核控制台</p>
+        </div>
+
+        <nav class="nav-tabs" aria-label="主导航">
+          <button class="nav-tab active" data-view="dashboard" aria-current="page">
+            <span>总览</span>
+            <small>任务总览</small>
+          </button>
+          <button class="nav-tab" data-view="workspace">
+            <span>工作台</span>
+            <small>人工审核</small>
+          </button>
+          <button class="nav-tab" data-view="settings">
+            <span>设置</span>
+            <small>系统配置</small>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="main-content" id="main-content">
+        <header class="view-header surface">
+          <p class="kicker">运营控制台</p>
+          <h1 id="view-title">任务总览</h1>
+          <p id="view-subtitle">统一查看审核任务状态、队列规模与处理进度。</p>
+        </header>
+
+        <div class="views-root" id="views-root">
+          <section class="view active" id="view-dashboard" data-screen="dashboard">
+            <div class="stats-grid">
+              <div class="stat-card"><span>待处理</span><strong id="stat-pending">0</strong></div>
+              <div class="stat-card"><span>已通过</span><strong id="stat-approved">0</strong></div>
+              <div class="stat-card"><span>已拒绝</span><strong id="stat-rejected">0</strong></div>
+              <div class="stat-card"><span>已超时</span><strong id="stat-timeout">0</strong></div>
+            </div>
+
+            <form id="dashboard-filter" class="filter-bar">
+              <label>
+                状态筛选
+                <select name="status">
+                  <option value="">全部</option>
+                  <option value="pending">待处理</option>
+                  <option value="approved">已通过</option>
+                  <option value="rejected">已拒绝</option>
+                  <option value="timeout">已超时</option>
+                </select>
+              </label>
+              <label>
+                场景 (scenario)
+                <select name="scenario">
+                  <option value="">全部</option>
+                  <option value="xhs_comment">小红书评论 (xhs_comment)</option>
+                </select>
+              </label>
+              <label>
+                任务ID (task_id)
+                <input type="text" name="task_id" placeholder="支持模糊查询" />
+              </label>
+              <button type="submit" class="primary-btn">筛选</button>
+            </form>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>任务ID (task_id)</th>
+                    <th>AgentID (agent_id)</th>
+                    <th>场景 (scenario)</th>
+                    <th>状态 (status)</th>
+                    <th>审核文本 (review_text)</th>
+                    <th>创建时间 (created_at)</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="card-list" id="dashboard-card-list"></div>
+          </section>
+
+          <section class="view" id="view-workspace" data-screen="workspace">
+            <div class="workspace-layout">
+              <section class="workspace-list surface">
+                <form id="workspace-filter" class="filter-bar">
+                  <label>
+                    列表状态
+                    <select name="status">
+                      <option value="pending">待处理</option>
+                      <option value="">全部</option>
+                      <option value="approved">已通过</option>
+                      <option value="rejected">已拒绝</option>
+                      <option value="timeout">已超时</option>
+                    </select>
+                  </label>
+                  <label>
+                    任务ID (task_id)
+                    <input type="text" name="task_id" placeholder="按任务ID筛选" />
+                  </label>
+                  <button type="submit" class="primary-btn">刷新列表</button>
+                </form>
+                <ul id="workspace-task-list"></ul>
+              </section>
+
+              <section class="workspace-detail surface" id="workspace-detail">
+                <p class="placeholder">请先在左侧选择一个任务</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" id="view-settings" data-screen="settings">
+            <div class="settings-card surface">
+              <form id="settings-form" class="settings-form">
+                <label>
+                  默认超时秒数 (default_timeout_seconds)
+                  <input type="number" name="default_timeout_seconds" min="1" required />
+                </label>
+                <label>
+                  默认超时动作 (default_timeout_action)
+                  <select name="default_timeout_action">
+                    <option value="auto_approve">自动通过 (auto_approve)</option>
+                    <option value="auto_reject">自动拒绝 (auto_reject)</option>
+                    <option value="mark_timeout">标记超时 (mark_timeout)</option>
+                  </select>
+                </label>
+                <label>
+                  默认审核人ID (default_reviewer_id)
+                  <input type="text" name="default_reviewer_id" maxlength="128" placeholder="例如: reviewer-001" />
+                </label>
+                <button type="submit" class="primary-btn">保存设置</button>
+              </form>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <nav class="mobile-nav surface" aria-label="移动导航">
+      <button class="nav-tab nav-tab-mobile active" data-view="dashboard" aria-current="page">总览</button>
+      <button class="nav-tab nav-tab-mobile" data-view="workspace">工作台</button>
+      <button class="nav-tab nav-tab-mobile" data-view="settings">设置</button>
+    </nav>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
